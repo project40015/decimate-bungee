@@ -2,7 +2,6 @@ package decimate.bungee.core;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import net.md_5.bungee.BungeeCord;
