@@ -3,6 +3,8 @@ package decimate.bungee.core;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
@@ -26,8 +28,8 @@ public class BungeeCore extends Plugin implements Listener {
 	@EventHandler
 	public void onPing(ProxyPingEvent event){
 		ServerPing sp = event.getResponse();
-		sp.setDescription(ChatColor.YELLOW + "DECIMATEPVP.COM" + ChatColor.GRAY + ":\n" + ChatColor.GRAY + motd);
-		if(System.currentTimeMillis()-lastCheck >= 1000*60){
+		sp.setDescription(ChatColor.YELLOW + "DECIMATEPVP.COM" + ChatColor.GRAY + ": \n" + ChatColor.GRAY + motd);
+		if(System.currentTimeMillis()-lastCheck >= 1000*10){
 			updateMotd();
 		}
 	}
@@ -36,9 +38,16 @@ public class BungeeCore extends Plugin implements Listener {
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(new File(this.getDataFolder().getAbsolutePath() + "/motd.txt")));
-			String line = br.readLine();
-			if(line != null){
-				motd = ChatColor.translateAlternateColorCodes('&', line);
+			String line;
+			List<String> options = new ArrayList<>();
+			while((line = br.readLine()) != null){
+				options.add(line);
+			}
+			if(options.size() >= 1){
+				String ln = options.get((int)(Math.random()*options.size()));
+				motd = ChatColor.translateAlternateColorCodes('&', ln);
+			}else{
+				motd = ChatColor.translateAlternateColorCodes('&', "\n&7Minecraft Factions Network");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
