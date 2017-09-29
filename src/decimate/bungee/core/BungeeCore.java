@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import net.md_5.bungee.BungeeCord;
@@ -19,8 +20,12 @@ public class BungeeCore extends Plugin implements Listener {
 	private String motd = "Innovating factions...";
 	private long lastCheck;
 	
+	private long release;
+	
+	@SuppressWarnings("deprecation")
 	public void onEnable(){
 		BungeeCord.getInstance().getPluginManager().registerListener(this, this);
+		release = (new Date(2017-1900, 9-1, 30, 9, 0)).getTime() - System.currentTimeMillis();
 		updateMotd();
 	}
 	
@@ -32,6 +37,15 @@ public class BungeeCore extends Plugin implements Listener {
 		if(System.currentTimeMillis()-lastCheck >= 1000*10){
 			updateMotd();
 		}
+	}
+	
+	public String longToTime(long time){
+		int seconds = (int) ((time / 1000) % 60);
+		int minutes = (int) ((time / (1000*60)) % 60);
+		int hours   = (int) ((time / (1000*60*60)) % 24);
+		int days = (int) ((time / (1000*60*60*24)));
+	
+		return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
 	}
 	
 	public void updateMotd(){
@@ -46,6 +60,7 @@ public class BungeeCore extends Plugin implements Listener {
 			if(options.size() >= 1){
 				String ln = options.get((int)(Math.random()*options.size()));
 				motd = ChatColor.translateAlternateColorCodes('&', ln);
+				motd = motd.replaceAll("%seasonlaunch%", longToTime(release));
 			}else{
 				motd = ChatColor.translateAlternateColorCodes('&', "\n&7Minecraft Factions Network");
 			}
